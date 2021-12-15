@@ -14,7 +14,6 @@ public class MyGeneric<T> {
         //T不能new对象（不能实列化）
         System.out.println(t);
     }
-
     public T getT() {
         return t;
     }
