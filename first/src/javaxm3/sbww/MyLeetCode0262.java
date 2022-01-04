@@ -1,7 +1,9 @@
 package javaxm3.sbww;
 
-import java.util.HashMap;
-import java.util.Map;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class MyLeetCode0262 {
 
@@ -16,24 +18,33 @@ public class MyLeetCode0262 {
 
     public int[] loudAndRich(int[][] richer, int[] quiet) {
         int[] aus = new int[quiet.length];
-        Map<Integer,Integer> map = new HashMap<>();
-        for (int i = 0; i < richer.length; i++) {
-            int a = richer[i][0],
-                    b = richer[i][1];
-            int an = map.getOrDefault(a,0);
-            if (an==0){
-                map.put(a,map.getOrDefault(b,0)+1);
-            }else {
-                map.put(a,map.get(a)+1);
+        List<Integer>[] map = new ArrayList[quiet.length];
+
+        for (int i = 0; i < quiet.length; i++) {
+            map[i] = new ArrayList<>();
+        }
+
+
+        for (int [] x:richer) {
+            map[x[1]].add(x[0]);
+        }
+        Arrays.fill(aus,-1);
+
+        for (int i = 0; i < quiet.length; i++) {
+            dfs(i,quiet,map,aus);
+        }
+        return aus;
+    }
+    public void dfs(int x,int[] quiet,List<Integer>[] map,int [] aus){
+        if (aus[x]!=-1){
+            return;
+        }
+        aus[x] = x;
+        for (Integer a:map[x]) {
+            dfs(a,quiet,map,aus);
+            if (quiet[aus[a]]<quiet[aus[x]]){
+                aus[x] = aus[a];
             }
         }
-        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
-            System.out.println(entry.getKey()+"===="+entry.getValue());
-        }
-
-
-
-
-        return aus;
     }
 }
